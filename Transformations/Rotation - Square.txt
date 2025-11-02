@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <graphics.h>
+#include <math.h>
+#include <conio.h>
+
+
+void rotatePoint(int x, int y, int cx, int cy, float angle, int *xr, int *yr) {
+    float rad = angle * (3.14159 / 180); // Convert to radians
+    int x_shifted = x - cx;
+    int y_shifted = y - cy;
+
+    *xr = cx + (x_shifted * cos(rad)) - (y_shifted * sin(rad));
+    *yr = cy + (x_shifted * sin(rad)) + (y_shifted * cos(rad));
+}
+
+
+void drawSquare(int x[4], int y[4], int color) {
+    setcolor(color);
+    for (int i = 0; i < 4; i++) {
+        line(x[i], y[i], x[(i + 1) % 4], y[(i + 1) % 4]);
+    }
+}
+
+void main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "C:\\Turboc3\\BGI");
+
+
+    int x[4] = {200, 300, 300, 200};
+    int y[4] = {200, 200, 300, 300};
+
+  
+    int cx = (x[0] + x[2]) / 2;
+    int cy = (y[0] + y[2]) / 2;
+ printf("'s Rotation of a square : ");
+    drawSquare(x, y, WHITE);
+ 
+    int xr[4], yr[4];
+    float angle = 45;  // Rotate by 45 degrees
+
+    for (int i = 0; i < 4; i++) {
+        rotatePoint(x[i], y[i], cx, cy, angle, &xr[i], &yr[i]);
+    }
+
+    drawSquare(xr, yr,YELLOW );
+
+    getch();
+    closegraph();
+}

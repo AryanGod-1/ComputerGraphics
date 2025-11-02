@@ -1,0 +1,98 @@
+#include <graphics.h>
+#include <conio.h>
+#include <stdio.h>
+#define MAX 20
+int x_min = 100, y_min = 100, x_max = 400, y_max = 300;
+int polyX[MAX], polyY[MAX], n, tempX[MAX], tempY[MAX], tempN;
+void drawPolygon(int x[], int y[], int n, int color) {
+ int i;
+ setcolor(color);
+ for(i = 0; i < n; i++) {
+ line(x[i], y[i], x[(i+1)%n], y[(i+1)%n]);
+ }
+}
+void clipPolygonEdge(int inX[], int inY[], int inN, char edge) {
+ int i, j, xi, yi,x1,x2,y1,y2,inside1,inside2;
+ tempN = 0;
+ for(i = 0; i < inN; i++) {
+ j = (i + 1) % inN;
+ x1 = inX[i]; y1 = inY[i];
+ x2 = inX[j]; y2 = inY[j];
+ inside1 = 0; inside2 = 0;
+ switch(edge) {
+ case 'L': inside1 = (x1 >= x_min); inside2 = (x2 >= x_min); break;
+ case 'R': inside1 = (x1 <= x_max); inside2 = (x2 <= x_max); break;
+ case 'B': inside1 = (y1 >= y_min); inside2 = (y2 >= y_min); break;
+ case 'T': inside1 = (y1 <= y_max); inside2 = (y2 <= y_max); break;
+ }
+ if(inside1 && inside2) {
+ tempX[tempN] = x2; tempY[tempN] = y2; tempN++;
+ }
+ else if(inside1 && !inside2) {
+ switch(edge) {
+ case 'L': xi = x_min; yi = y1 + (y2 - y1)*(x_min - x1)/(x2 - x1); break;
+ case 'R': xi = x_max; yi = y1 + (y2 - y1)*(x_max - x1)/(x2 - x1); break;
+ case 'B': yi = y_min; xi = x1 + (x2 - x1)*(y_min - y1)/(y2 - y1); break;
+ case 'T': yi = y_max; xi = x1 + (x2 - x1)*(y_max - y1)/(y2 - y1); break;
+ }
+ tempX[tempN] = xi; tempY[tempN] = yi; tempN++;
+ }
+ else if(!inside1 && inside2) {
+ switch(edge) {
+ case 'L': xi = x_min; yi = y1 + (y2 - y1)*(x_min - x1)/(x2 - x1); break;
+ case 'R': xi = x_max; yi = y1 + (y2 - y1)*(x_max - x1)/(x2 - x1); break;
+ case 'B': yi = y_min; xi = x1 + (x2 - x1)*(y_min - y1)/(y2 - y1); break;
+ case 'T': yi = y_max; xi = x1 + (x2 - x1)*(y_max - y1)/(y2 - y1); break;
+ }
+ tempX[tempN] = xi; tempY[tempN] = yi; tempN++;
+ tempX[tempN] = x2; tempY[tempN] = y2; tempN++;
+ }
+ }
+ for(i = 0; i < tempN; i++) {
+ polyX[i] = tempX[i];
+ polyY[i] = tempY[i];
+ }
+ n = tempN;
+}
+void sutherlandHodgman() {
+ clipPolygonEdge(polyX, polyY, n, 'L'); // Left
+ clipPolygonEdge(polyX, polyY, n, 'R'); // Right
+ clipPolygonEdge(polyX, polyY, n, 'B'); // Bottom
+ clipPolygonEdge(polyX, polyY, n, 'T'); // Top
+}
+/*
+void drawWatermark() {
+ int tableX1 = x_max + 15, tableX2 = tableX1 + 180;
+ int tableY1 = y_max - 60, tableY2 = y_max;
+ setcolor(WHITE);
+ rectangle(tableX1, tableY1, tableX2, tableY2);
+ outtextxy(tableX1 + 10, tableY1 + 10, "");
+ outtextxy(tableX1 + 10, tableY1 + 30, "");
+ outtextxy(tableX1 + 10, tableY1 + 50, "");
+}
+*/
+int main() {
+ int gd = DETECT, gm, i;
+ initgraph(&gd, &gm, "C:\\TURBOC3\\BGI");
+ printf("Enter number of vertices (max 20): ");
+ scanf("%d", &n);
+ printf("Enter polygon vertices (x y):\n");
+ for(i = 0; i < n; i++) {
+ scanf("%d %d", &polyX[i], &polyY[i]);
+ }
+ drawPolygon(polyX, polyY, n, YELLOW);
+ setcolor(WHITE);
+ rectangle(x_min, y_min, x_max, y_max);
+// drawWatermark();
+ sutherlandHodgman();
+ drawPolygon(polyX, polyY, n, GREEN);
+ getch();
+ closegraph();
+ return 0;
+}
+
+
+
+
+/*INPUT  10
+100-300 KE BEECH ME RANDOM 10 TIMES */

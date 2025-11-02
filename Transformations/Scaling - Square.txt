@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <graphics.h>
+#include <conio.h>
+
+void scalePoint(int x, int y, int cx, int cy, float sx, float sy, int *xs, int *ys) {
+    int x_shifted = x - cx;
+    int y_shifted = y - cy;
+    *xs = cx + (x_shifted * sx);
+    *ys = cy + (y_shifted * sy);
+}
+
+void drawSquare(int x[4], int y[4], int color) {  // Changed to square
+    setcolor(color);
+    for (int i = 0; i < 4; i++) {
+        line(x[i], y[i], x[(i + 1) % 4], y[(i + 1) % 4]);  // % 4 for square
+    }
+}
+
+void main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "C:\\Turboc3\\BGI");
+
+    // Square coordinates (4 points)
+    int x[4] = {200, 300, 300, 200};
+    int y[4] = {200, 200, 300, 300};
+
+    // Center of square (can use centroid or midpoint of diagonal)
+    int cx = (x[0] + x[2]) / 2;  // = 250
+    int cy = (y[0] + y[2]) / 2;  // = 250
+
+    printf("Scaling of the square :\n");
+    drawSquare(x, y, WHITE);
+
+    float sx = 1.5, sy = 1.5;
+
+    int xs[4], ys[4];  // Arrays of size 4
+    for (int i = 0; i < 4; i++) {  // Loop 4 times for square
+        scalePoint(x[i], y[i], cx, cy, sx, sy, &xs[i], &ys[i]);
+    }
+
+    drawSquare(xs, ys, GREEN);
+
+    getch();
+    closegraph();
+}

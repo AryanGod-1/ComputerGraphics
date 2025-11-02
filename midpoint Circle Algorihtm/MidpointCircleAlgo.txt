@@ -1,0 +1,53 @@
+
+#include <conio.h>
+#include <graphics.h>
+#include <math.h>
+#include <dos.h>
+#include <stdio.h>
+
+void midpointCircle(int xc, int yc, int r) {
+ int x = 0, y = r;
+ int p = 1 - r; // Initial decision parameter
+ // Plot the points in all eight octants
+ while (x <= y) {
+ putpixel(xc + x, yc + y, WHITE); // Octant 1
+ putpixel(xc - x, yc + y, WHITE); // Octant 2
+ putpixel(xc + x, yc - y, WHITE); // Octant 3
+ putpixel(xc - x, yc - y, WHITE); // Octant 4
+ putpixel(xc + y, yc + x, WHITE); // Octant 5
+ putpixel(xc - y, yc + x, WHITE); // Octant 6
+ putpixel(xc + y, yc - x, WHITE); // Octant 7
+ putpixel(xc - y, yc - x, WHITE); // Octant 8
+ // Move to the next point
+ if (p < 0) {
+ p = p + 2 * x + 3;
+ } else {
+ p = p + 2 * (x - y) + 5;
+ y--; // Move y inwards
+ }
+ x++; // Move x outwards
+ }
+}
+int main() {
+ int gd = DETECT, gm;
+ int xc, yc, r;
+ // Initialize the graphics mode
+ initgraph(&gd, &gm, "C:\\TURBOC3\\BGI");
+ // Get the center and radius for the circle
+ printf("Enter the center coordinates (xc, yc): ");
+ scanf("%d %d", &xc, &yc);
+ printf("Enter the radius of the circle: ");
+ scanf("%d", &r);
+
+ midpointCircle(xc, yc, r);
+
+ getch();
+ closegraph();
+ return 0;
+}
+
+
+/* input :
+ center : 200 200
+radius : 50
+*/

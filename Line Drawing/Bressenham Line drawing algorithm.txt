@@ -1,0 +1,70 @@
+
+#include <stdio.h>
+#include <graphics.h>
+#include <math.h>
+#include <conio.h>
+void drawLine(int x1, int y1, int x2, int y2) {
+ // 1. Calculate differences
+ int dx = abs(x2 - x1);
+ int dy = abs(y2 - y1);
+
+ // Determine the direction of increment
+ int x_inc = (x1 < x2) ? 1 : -1;
+ int y_inc = (y1 < y2) ? 1 : -1;
+
+ // 2. Calculate slope (m)
+ float m = (float)dy / dx;
+
+ int x = x1;
+ int y = y1;
+
+ // Plot the first point
+ putpixel(x, y, WHITE);
+
+ if (m < 1) {
+ // Case when slope is less than 1
+ // 3. Initial decision parameter
+ int P = 2 * dy - dx;
+
+ for (int i = 0; i < dx; i++) {
+ x += x_inc;
+
+ if (P < 0) {
+ P = P + 2 * dy;
+ } else {
+ y += y_inc;
+ P = P + 2 * dy - 2 * dx;
+ }
+
+ putpixel(x, y, WHITE);
+ }
+ } else {
+ int P = 2 * dx - dy;
+
+ for (int i = 0; i < dy; i++) {
+ y += y_inc;
+
+ if (P < 0) {
+ P = P + 2 * dx;
+ } else {
+ x += x_inc;
+ P = P + 2 * dx - 2 * dy;
+ }
+
+ putpixel(x, y, WHITE);
+ }
+ }
+}
+
+void main() {
+ int gd = DETECT, gm;
+ initgraph(&gd, &gm, "C:\\TURBOC3\\BGI");
+
+ int x1=100, y1=100, x2=400, y2=300;
+
+ drawLine(x1, y1, x2, y2);
+ 
+getch();
+ closegraph();
+ 
+}

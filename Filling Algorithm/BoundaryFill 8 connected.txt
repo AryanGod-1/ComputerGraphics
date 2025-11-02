@@ -1,0 +1,32 @@
+#include <graphics.h>
+#include <conio.h>
+#include <stdio.h>
+
+void boundaryFill(int x, int y, int fill, int boundary) {
+    if (getpixel(x, y) != boundary && getpixel(x, y) != fill) {
+        putpixel(x, y, fill);
+        boundaryFill(x + 1, y, fill, boundary);      // Right
+        boundaryFill(x - 1, y, fill, boundary);      // Left
+        boundaryFill(x, y + 1, fill, boundary);      // Down
+        boundaryFill(x, y - 1, fill, boundary);      // Up
+        boundaryFill(x + 1, y + 1, fill, boundary);  // Diagonal: Down-Right
+        boundaryFill(x + 1, y - 1, fill, boundary);  // Diagonal: Up-Right
+        boundaryFill(x - 1, y + 1, fill, boundary);  // Diagonal: Down-Left
+        boundaryFill(x - 1, y - 1, fill, boundary);  // Diagonal: Up-Left
+    }
+}
+
+void main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "C:\\Turboc3\\BGI");
+
+    // Draw a boundary
+    //xmin,ymin,xmax,ymax
+    rectangle(100,100, 200, 150);
+
+    // center point for boundaryfill,x coordinate as inside xmin,xmax and ymin ymax
+    boundaryFill(150, 125, RED, WHITE);
+
+    getch();
+    closegraph();
+}

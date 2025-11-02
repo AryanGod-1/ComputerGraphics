@@ -1,0 +1,52 @@
+#include <conio.h>
+#include <graphics.h>
+#include <math.h>
+#include <stdio.h>
+
+void DDA(int x1, int y1, int x2, int y2) {
+    int dx, dy, steps, i;
+    float x, y, xIncrement, yIncrement;
+
+    dx = x2 - x1;
+    dy = y2 - y1;
+
+    // Determine the number of steps required for drawing the line
+    if (abs(dx) > abs(dy))
+        steps = abs(dx);
+    else
+        steps = abs(dy);
+
+    // Calculate the increment in x and y for each step
+    xIncrement = dx / (float)steps;
+    yIncrement = dy / (float)steps;
+
+    // Initial point
+    x = x1;
+    y = y1;
+
+    // Draw the line by plotting points
+    for (i = 0; i <= steps; i++) {
+        putpixel((int)(x + 0.5), (int)(y + 0.5), WHITE);  // Plotting the pixel
+        x += xIncrement;
+        y += yIncrement;
+    }
+}
+
+
+void main() {
+    int gd = DETECT, gm;
+
+    // Hardcoded input coordinates for the line
+    int x1 = 100, y1 = 100;  // First point (x1, y1)
+    int x2 = 400, y2 = 300;  // Second point (x2, y2)
+
+    // Initialize the graphics mode
+    initgraph(&gd, &gm, "C:\\Turboc3\\BGI");
+
+    // Call DDA function to draw the line
+    DDA(x1, y1, x2, y2);
+
+    getch();  // Wait for user input
+    closegraph();  // Close the graphics mode
+
+}

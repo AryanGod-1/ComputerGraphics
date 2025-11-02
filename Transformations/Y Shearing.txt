@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include <conio.h>
+#include <graphics.h>
+
+void drawRectangle(int x[], int y[], int color) {
+    setcolor(color);
+    line(x[0], y[0], x[1], y[1]);
+    line(x[1], y[1], x[2], y[2]);
+    line(x[2], y[2], x[3], y[3]);
+    line(x[3], y[3], x[0], y[0]);
+}
+
+void main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "C:\\TurboC3\\BGI");
+    int original_rect_x[4] = {50, 200, 200, 50};
+    int original_rect_y[4] = {200, 200, 150, 150};
+    int tx = 200;
+    int ty = 0;
+    int sheared_rect_x[4], sheared_rect_y[4];
+    float sh_y = 0.5;  // Changed to Y-shear factor
+    
+    printf("Y-Shearing and Translating a Rectangle\n");
+    drawRectangle(original_rect_x, original_rect_y, RED);
+
+    for (int i = 0; i < 4; i++) {
+        int temp_y = original_rect_y[i] + (int)(sh_y * original_rect_x[i]);  // Changed to Y-shear
+        sheared_rect_x[i] = original_rect_x[i] + tx;  // X unchanged for shearing
+        sheared_rect_y[i] = temp_y + ty;
+    }
+
+    drawRectangle(sheared_rect_x, sheared_rect_y, YELLOW);
+    getch();
+    closegraph();
+}

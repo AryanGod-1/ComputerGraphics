@@ -1,0 +1,31 @@
+#include <graphics.h>
+#include <conio.h>
+#include <stdio.h>
+
+void floodFill(int x, int y, int fill, int old) {
+    if (getpixel(x, y) == old) {
+        putpixel(x, y, fill);
+        floodFill(x + 1, y, fill, old);      // Right
+        floodFill(x - 1, y, fill, old);      // Left
+        floodFill(x, y + 1, fill, old);      // Down
+        floodFill(x, y - 1, fill, old);      // Up
+        floodFill(x + 1, y + 1, fill, old);  // Diagonal: Down-Right
+        floodFill(x + 1, y - 1, fill, old);  // Diagonal: Up-Right
+        floodFill(x - 1, y + 1, fill, old);  // Diagonal: Down-Left
+        floodFill(x - 1, y - 1, fill, old);  // Diagonal: Up-Left
+    }
+}
+
+void main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "C:\\Turboc3\\BGI");
+
+    // Draw a boundary
+    rectangle(100, 100, 200, 150);
+    
+    /* Flood fill from center point x,y, new color to be filled inside till boundary of rect,oldcolor inisde rect*/
+    floodFill(150, 125, RED, BLACK);
+
+    getch();
+    closegraph();
+}

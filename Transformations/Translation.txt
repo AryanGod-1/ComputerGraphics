@@ -1,0 +1,36 @@
+#include <graphics.h>
+#include <conio.h>
+#include <stdio.h>
+void drawRectangle(int x1, int y1, int x2, int y2, int color) {
+    setcolor(color);
+    line(x1, y1, x2, y1); // Top
+    line(x2, y1, x2, y2); // Right
+    line(x2, y2, x1, y2); // Bottom
+    line(x1, y2, x1, y1); // Left
+}
+
+
+void applyTranslation(int x, int y, int tx, int ty, int *x_new, int *y_new) {
+    *x_new = x + tx;
+    *y_new = y + ty;
+}
+
+void main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "C:\\Turboc3\\BGI");
+
+    int x1 = 100, y1 = 100, x2 = 200, y2 = 150;
+    int tx = 70, ty = 40;  // Translation values
+     printf("Aryan's translation of a rectangle :  \n");
+    drawRectangle(x1, y1, x2, y2, WHITE);
+
+    // Apply matrix translation 
+    int x1_t, y1_t, x2_t, y2_t;
+    applyTranslation(x1, y1, tx, ty, &x1_t, &y1_t);
+    applyTranslation(x2, y2, tx, ty, &x2_t, &y2_t);
+
+   drawRectangle(x1_t, y1_t, x2_t, y2_t, GREEN);
+
+    getch();
+    closegraph();
+}

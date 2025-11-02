@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <graphics.h>
+#include <conio.h>
+
+
+void scalePoint(int x, int y, int cx, int cy, float sx, float sy, int *xs, int *ys) {
+    int x_shifted = x - cx;
+    int y_shifted = y - cy;
+
+    *xs = cx + (x_shifted * sx);
+    *ys = cy + (y_shifted * sy);
+}
+
+
+void drawTriangle(int x[3], int y[3], int color) {
+    setcolor(color);
+    line(x[0], y[0], x[1], y[1]);
+    line(x[1], y[1], x[2], y[2]);
+    line(x[2], y[2], x[0], y[0]);
+}
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "C:\\Turboc3\\BGI");
+
+       int x[3] = {200, 400, 300};
+    int y[3] = {300, 300, 150};
+
+
+    int cx = (x[0] + x[1] + x[2]) / 3;
+    int cy = (y[0] + y[1] + y[2]) / 3;
+
+      printf("Scaling of the triangle :\n " );
+    drawTriangle(x, y, WHITE);
+
+    float sx = 1.5, sy = 1.5;
+
+    int xs[3], ys[3];
+    for (int i = 0; i < 3; i++) {
+	scalePoint(x[i], y[i], cx, cy, sx, sy, &xs[i], &ys[i]);
+    }
+
+    drawTriangle(xs, ys, GREEN);
+
+    getch();
+    closegraph();
+    return 0;
+}

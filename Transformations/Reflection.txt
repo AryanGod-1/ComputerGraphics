@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include <graphics.h>
+#include <conio.h>
+
+void drawSquare(int x[], int y[], int color) {
+    setcolor(color);
+    line(x[0], y[0], x[1], y[1]);
+    line(x[1], y[1], x[2], y[2]);
+    line(x[2], y[2], x[3], y[3]);
+    line(x[3], y[3], x[0], y[0]);
+}
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "C:\\Turboc3\\BGI");
+ 
+    int orig_x[4] = {100, 200, 200, 100};
+    int orig_y[4] = {100, 100, 200, 200};
+   
+    int refl_x[4], refl_y[4]; //reflected 
+   printf("Reflection of a square :\n");
+    printf("About Y-axis\n");
+ 
+    drawSquare(orig_x, orig_y, RED);
+
+    // Apply reflection about Y-axis: (x', y') = (xmax - x, y)
+    for (int i = 0; i < 4; i++) {
+        refl_x[i] = getmaxx() - orig_x[i];  
+        refl_y[i] = orig_y[i];             
+    }
+    drawSquare(refl_x, refl_y, YELLOW);
+    getch();
+    closegraph();
+    return 0;
+}
